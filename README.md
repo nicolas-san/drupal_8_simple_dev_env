@@ -35,8 +35,6 @@ Ansible playbook for this.
 git clone https://github.com/nicolas-san/drupal_8_simple_dev_env
 ```
 
-
-
 ## Create a vars/main.yml file
 ```shell script
 cd drupal_8_simple_dev_env
@@ -77,6 +75,9 @@ Or, destroy and start again
 vagrant destroy
 vagrant up
 ```
+
+## Install Drupal 8
+Go to https://drupal.localdev and install it.
 
 ## Debug
 You can make ansible more verbose by adding "vv" to the ansible command in the Vagrantfile:

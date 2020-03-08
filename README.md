@@ -79,6 +79,9 @@ vagrant up
 ## Install Drupal 8
 Go to https://drupal.localdev and install it.
 
+## Mailhog
+http://mail.drupal.localdev/
+
 ## Debug
 You can make ansible more verbose by adding "vv" to the ansible command in the Vagrantfile:
 ```shell script

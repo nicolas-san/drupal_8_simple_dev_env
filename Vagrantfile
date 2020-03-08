@@ -68,7 +68,7 @@ Vagrant.configure("2") do |config|
   # end
   config.vm.provider "virtualbox" do |v|
     #v.customize ["modifyvm", :id, "--cableconnected1", "on"]
-    v.name = "drupal_dev_env"
+    v.name = "drupal_8_simple_dev_env"
     v.memory = "2048"
     v.cpus = 2
     #vb.customize ["modifyhd", "disk id", "--resize", "size in megabytes"]

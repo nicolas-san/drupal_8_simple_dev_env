@@ -31,12 +31,14 @@ Ansible playbook for this.
 
 ## Clone this repository
 ```shell script
-https://gitlab.com/nicolas-san/drupal8-base.git
+git clone https://github.com/nicolas-san/drupal_8_simple_dev_env
 ```
+
+
 
 ## Create a vars/main.yml file
 ```shell script
-cd drupal8-base
+cd drupal_8_simple_dev_env
 cp ansible/vars/main_dist.yml ansible/vars/main.yml
 ```
 
@@ -55,13 +57,13 @@ If you want you can edit the vagrantfile, you can change the hostname, ip, memor
 ```shell script
     config.vm.network "private_network", ip: "192.168.47.11"
     config.vm.hostname = "drupal.localdev"
-    v.name = "drupal_dev_env"
+    v.name = "drupal_8_simple_dev_env"
     v.memory = "2048"
     v.cpus = 2
 ```
 
 ## Run
-At the root, ./drupal8-base
+In the project root dir (drupal_8_simple_dev_env)
 ```shell script
 vagrant up
 ```
@@ -74,6 +76,13 @@ Or, destroy and start again
 vagrant destroy
 vagrant up
 ```
+
+## Debug
+You can make ansible more verbose by adding "vv" to the ansible command in the Vagrantfile:
+```shell script
+ansible.verbose = "vvv"
+```
+
 ## Thanks
 I have read, search and take information and code snippets from lot of places, like stackoverflow, 
 and some github repositories.

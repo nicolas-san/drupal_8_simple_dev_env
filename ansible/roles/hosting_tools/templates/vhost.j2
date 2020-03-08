@@ -1,0 +1,42 @@
+<VirtualHost *:80>
+
+    ServerName {{project_name}}.localdev
+    DocumentRoot /var/www/project/drupal/web
+    <Directory /var/www/drupal/web>
+        CGIPassAuth on
+        Options FollowSymlinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/drupal_error.log
+    CustomLog ${APACHE_LOG_DIR}/drupal_access.log combined
+</VirtualHost>
+
+<VirtualHost *:443>
+        ServerName {{project_name}}.localdev
+
+        DocumentRoot /var/www/project/drupal/web
+
+        SSLEngine on
+
+        SSLCertificateFile      /etc/ssl/local/drupal.localdev.crt
+        SSLCertificateKeyFile /etc/ssl/local/drupal.localdev.pem
+
+        <FilesMatch "\.(cgi|shtml|phtml|php)$">
+            SSLOptions +StdEnvVars
+        </FilesMatch>
+        <Directory /usr/lib/cgi-bin>
+            SSLOptions +StdEnvVars
+        </Directory>
+
+        <Directory /var/www/project/drupal/web>
+                CGIPassAuth on
+                Options FollowSymlinks
+                AllowOverride All
+                Require all granted
+        </Directory>
+
+        ErrorLog ${APACHE_LOG_DIR}/drupal_error.log
+        CustomLog ${APACHE_LOG_DIR}/drupal_access.log combined
+</VirtualHost>

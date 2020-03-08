@@ -1,0 +1,7 @@
+---
+# tasks file for httpd
+- include: install_httpd.yml
+- include: install_mariadb.yml
+- include: configure_vhost.yml
+- include: composer.yml
+- include: ssl.yml

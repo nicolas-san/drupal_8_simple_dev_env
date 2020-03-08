@@ -1,0 +1,5 @@
+---
+mariadb_root_pass: 'MakeARealPasswordHere'
+project_name: 'MyProject'
+database_name:  "my_project"
+database_user:  "defaultUser"

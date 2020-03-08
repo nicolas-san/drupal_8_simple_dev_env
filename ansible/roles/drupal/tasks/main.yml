@@ -1,0 +1,85 @@
+---
+- name: Create a new db
+  mysql_db: name={{ database_name }} state=present
+
+- name: Create a directory if it does not exist
+  file:
+    path: /var/www/project/drupal/
+    state: absent
+
+- name: Create a directory if it does not exist
+  file:
+    path: /var/www/project/drupal/
+    state: directory
+    mode: '0755'
+    group: www-data
+    owner: www-data
+
+- name: Create a directory if it does not exist
+  file:
+    path: /var/www/vendor
+    state: directory
+    mode: '0755'
+    group: www-data
+    owner: www-data
+#- name: Composer create-project # increase timeout because of nfs, solution could be to install vendors outside the nfs folder
+#  command: sudo -u vagrant composer create-project drupal/recommended-project ./drupal/
+#  args:
+#    chdir: '/var/www/project/drupal/'
+#    environment: COMPOSER_PROCESS_TIMEOUT=1200
+
+- name: Export environment COMPOSER_PROCESS_TIMEOUT=1200
+  shell: export COMPOSER_PROCESS_TIMEOUT=1200
+
+- name: Composer create-project # increase timeout because of nfs, solution could be to install vendors outside the nfs folder
+  composer:
+    command: create-project
+    arguments: drupal/recommended-project /var/www/project/drupal/
+    working_dir: /var/www/project/
+  become: yes
+  become_user: vagrant
+  #args:
+    #chdir: '/var/www/project/drupal/'
+    #environment: COMPOSER_PROCESS_TIMEOUT=1200
+
+- name: Require drush
+  composer:
+    command: require
+    arguments: drush/drush
+    working_dir: /var/www/project/drupal
+  become: yes
+  become_user: vagrant
+#- name: Require drush
+#  command:  sudo -u vagrant composer require drush/drush
+#  args:
+#    chdir: '/var/www/project/drupal/'
+
+#  Drush launcher
+- name: Download and install drush-launcher
+  get_url:
+    url: https://github.com/drush-ops/drush-launcher/releases/latest/download/drush.phar
+    dest: /usr/local/bin/drush
+  tags: drush
+
+- name: make drush executable
+  file:
+    path: /usr/local/bin/drush
+    mode: a+x
+    state: file
+  tags: drush
+
+- name: Copy the setting file for Drupal
+  copy:
+    src: /var/www/project/drupal/web/sites/default/default.settings.php
+    dest: /var/www/project/drupal/web/sites/default/settings.php
+    remote_src: yes
+    owner: vagrant
+    group: www-data
+
+- name: Chown drupal files
+  file:
+    path: /var/www/project/drupal/
+    state: directory
+    recurse: yes
+    owner: vagrant
+    group: www-data

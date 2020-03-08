@@ -1,0 +1,32 @@
+---
+# tasks file for common
+- name: Install basic packages
+  apt:
+    name: [
+      'rkhunter', 
+      'htop',
+      'nano',
+      'ntp',
+      'ntpdate',
+      'git',
+      'unzip',
+      'apt-transport-https',
+      'python-pip',
+      'letsencrypt',
+      'logrotate', # todo check default configuration
+      'curl',
+      'lftp',
+      'rsyslog',
+      'util-linux-locales',
+      'locales',
+      'debconf-i18n',
+      'fail2ban'
+    ]
+  notify: rkhunter propupd
+
+- name: Add automatic rkhunter update db when apt install/update
+  lineinfile:
+      dest: /etc/default/rkhunter
+      regexp: '^APT_AUTOGEN="false"'
+      line: 'APT_AUTOGEN="true"'
+

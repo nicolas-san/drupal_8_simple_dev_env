@@ -1,0 +1,47 @@
+- name: Install apache2, modules and php
+  apt:
+    name: [
+      'apache2',
+      'php',
+      'php-curl',
+      'php-apcu',
+      'php-bz2',
+      'php-gd',
+      'imagemagick',
+      'php-imagick',
+      'php-intl',
+      'php-json',
+      'php-mbstring',
+      #'php-mcrypt',
+      'php-xml',
+      'php-zip',
+      'php-mysql',
+      'php-imap',
+      'php-sqlite3', #for test env to run functional tests
+      'certbot', # https://certbot.eff.org/lets-encrypt/debianbuster-apache
+      'python-certbot-apache',
+    ]
+
+  # a2enmod rewrite
+- name: a2enmod rewrite
+  command: a2enmod rewrite
+
+- name: a2enmod proxy
+  command: a2enmod proxy
+
+- name: a2enmod proxy_http
+  command: a2enmod proxy_http
+  notify: apache2 reload
+
+# It's Buster, it is php7.3
+- name: Raise the upload limit 7.3
+  lineinfile:
+    dest: /etc/php/7.3/apache2/php.ini
+    regexp: '^upload_max_filesize = 2M'
+    line: 'upload_max_filesize = 20M'
+
+- name: Add more memory to php 7.3
+  lineinfile:
+    dest: /etc/php/7.3/apache2/php.ini
+    regexp: '^memory_limit = 128MB'
+    line: 'memory_limit = 1G'

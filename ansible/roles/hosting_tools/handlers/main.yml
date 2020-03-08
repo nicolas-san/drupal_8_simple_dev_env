@@ -1,0 +1,21 @@
+---
+# handlers file for httpd
+#- name: apt-get update
+#  command: apt-get update
+- name: apt-get update
+  apt:
+    update_cache: yes
+
+- name: Flush mysql privileges
+  command: mysql -ne 'FLUSH privileges'
+
+
+#- name: apache2 reload
+#  command: service apache2 reload
+#  # todo check for graceful instead
+
+- name: apache2 reload
+  service:
+    name: apache2
+    state: restarted
+

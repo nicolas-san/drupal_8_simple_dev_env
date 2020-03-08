@@ -1,0 +1,9 @@
+/ansible/vars/main.yml
+/ansible/roles/geerlingguy.daemonize/
+/ansible/roles/geerlingguy.mailhog/
+/ansible/site.retry
+/ansible/TODO
+/drupal/
+/html/
+/.vagrant/
+/.idea/

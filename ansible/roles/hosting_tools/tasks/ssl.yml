@@ -1,0 +1,45 @@
+  # a2enmod ssl
+- name: a2enmod
+  command: a2enmod ssl
+  notify: apache2 reload
+
+- name: Install cryptography
+  pip:
+    name: cryptography
+
+- name: Install pyOpenSSL
+  pip:
+    name: pyOpenSSL
+
+- name: Create a directory if it does not exist
+  file:
+    path: /etc/ssl/local/
+    state: directory
+    mode: '0755'
+
+- name: Generate opennssl private key
+  openssl_privatekey:
+    path: /etc/ssl/local/drupal.localdev.pem
+
+- name: Generate openssl csr
+  openssl_csr:
+    path: /etc/ssl/local/drupal.localdev.csr
+    privatekey_path: /etc/ssl/local/drupal.localdev.pem
+    common_name: "{{project_name}}.localdev"
+
+- name: Generate a Self Signed OpenSSL certificate
+  openssl_certificate:
+    path: /etc/ssl/local/drupal.localdev.crt
+    privatekey_path: /etc/ssl/local/drupal.localdev.pem
+    csr_path: /etc/ssl/local/drupal.localdev.csr
+    provider: selfsigned
+
+- name: Remove cryptography
+  pip:
+    name: cryptography
+    state: absent
+
+- name: Remove pyOpenSSL
+  pip:
+    name: pyOpenSSL
+    state: absent

@@ -1,0 +1,10 @@
+---
+# Add a user to a password file and ensure permissions are set
+#- name: Add a user to a password file and ensure permissions are set
+#  htpasswd:
+#    path: /etc/mailhog/passwd
+#    name: mailLocal
+#    password: ''
+#   owner: root
+#    group: www-data
+#    mode: 0640

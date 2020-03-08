@@ -1,0 +1,8 @@
+---
+# handlers file for common
+- name: rkhunter propupd
+  command: rkhunter --propupd
+
+- name: apt-get update
+  apt:
+    update_cache: yes

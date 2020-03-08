@@ -1,0 +1,53 @@
+---
+- name: Install MariaDB
+  apt:
+    name: [
+      'mariadb-server',
+      'mariadb-client',
+      'python-mysqldb',
+      ]
+    update_cache: yes
+
+#bigger redo log
+#- name: Bigger redo log.
+#  lineinfile:
+#    dest: /etc/mysql/mariadb.conf.d/50-server.cnf
+#    line: innodb_log_file_size=2G
+
+# cleaning installation by running the same queries than the mysql_secure_installation script
+# override parameters.yml
+- name: Copy mariadb conf
+  copy:
+    src: 50-server.cnf
+    dest: '/etc/mysql/mariadb.conf.d/'
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Removes all anonymous user accounts
+  mysql_user:
+    name: ''
+    host_all: yes
+    state: absent
+
+# add admin databases
+- name: Create database admin
+  mysql_user:
+    name: "{{database_user}}"
+    host: localhost
+    password: "{{ mariadb_root_pass }}"
+    priv: '*.*:ALL,GRANT'
+    state: present
+
+- name: Removes test database
+  mysql_db:
+    name: test
+    state: absent
+
+- name: Delete root entries for all hosts exept local, remove test database, remove privileges from test database
+  command: mysql -ne "{{item}}"
+  with_items:
+    - DROP DATABASE IF EXISTS test
+    - DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')
+    - DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%'
+    - FLUSH PRIVILEGES

@@ -1,0 +1,36 @@
+---
+
+# copy vhost files
+- name: Copy vhost {{project_name}}.conf
+  template:
+    src: 'vhost.j2'
+    dest: '/etc/apache2/sites-available/000-{{project_name}}.conf'
+    owner: root
+    group: root
+    mode: 0600
+    backup: yes
+
+# copy mailhog vhost files
+- name: Copy mailhog vhost
+  copy:
+    src: 'mailhog.conf'
+    dest: '/etc/apache2/sites-available/002-mailhog.conf'
+    owner: root
+    group: root
+    mode: 0600
+    backup: yes
+
+# a2ensite
+- name: a2ensite {{project_name}}
+  command: a2ensite 000-{{project_name}}
+  notify: apache2 reload
+
+# a2ensite
+- name: a2ensite mailhog
+  command: a2ensite 002-mailhog
+  notify: apache2 reload
+
+# a2dissite
+- name: a2dissite
+  command: a2dissite 000-default
+  notify: apache2 reload

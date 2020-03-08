@@ -23,6 +23,7 @@ Ansible playbook for this.
 # Prerequisites
 - virtualization ready hardware
 - virtualbox
+- nfs
 - vagrant
 - git
 - a texteditor
